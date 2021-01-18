@@ -559,6 +559,7 @@ xfrd_process_soa_info_task(struct task_list_d* task)
 	xfrd_xfr_type* prev_xfr;
 	enum soainfo_hint hint;
 	time_t before, acquired = 0;
+	time_t seconds_since_acquired;
 	DEBUG(DEBUG_IPC,1, (LOG_INFO, "xfrd: process SOAINFO %s",
 		dname_to_string(task->zname, 0)));
 	zone = (xfrd_zone_type*)rbtree_search(xfrd->zones, task->zname);
@@ -665,9 +666,11 @@ xfrd_process_soa_info_task(struct task_list_d* task)
 		/* "rollback" on-disk soa information */
 		zone->soa_disk_acquired = zone->soa_nsd_acquired;
 		zone->soa_disk = zone->soa_nsd;
+		seconds_since_acquired =
+			  xfrd_time() > zone->soa_disk_acquired
+			? xfrd_time() - zone->soa_disk_acquired : 0;
 
-		if(xfrd_time() - zone->soa_disk_acquired
-			>= (time_t)ntohl(zone->soa_disk.expire))
+		if(seconds_since_acquired >= bound_soa_disk_expire(zone))
 		{
 			/* zone expired */
 			xfrd_set_zone_state(zone, xfrd_zone_expired);
