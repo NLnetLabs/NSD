@@ -1713,12 +1713,7 @@ xfrd_send_ixfr_request_udp(xfrd_zone_type* zone)
 		qid_generate());
 	zone->query_id = ID(xfrd->packet);
 	zone->query_type = TYPE_IXFR;
-	/* delete old xfr file? */
-	if(zone->msg_seq_nr)
-		xfrd_unlink_xfrfile(xfrd->nsd, zone->xfrfilenumber);
-	zone->msg_seq_nr = 0;
-	zone->msg_rr_count = 0;
-	xfrd_prepare_zone_xfr(zone);
+	xfrd_prepare_zone_xfr(zone); /* deletes old xfr file if needed */
 	DEBUG(DEBUG_XFRD,1, (LOG_INFO, "sent query with ID %d", zone->query_id));
         NSCOUNT_SET(xfrd->packet, 1);
 	xfrd_write_soa_buffer(xfrd->packet, zone->apex, &zone->soa_disk);
