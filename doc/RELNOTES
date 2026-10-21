@@ -1,6 +1,6 @@
 NSD RELEASE NOTES
 
-4.15.4 (in development)
+4.15.4
 ================
 FEATURES:
 	- A report-channel config option to return a Report-Channel EDNS option
