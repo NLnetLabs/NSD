@@ -16,7 +16,7 @@ do
 		echo "Error: transport was not UDP"
 		exit 1
 	fi
-	if grep -q '^; PAD:' UDP-${SIZE}.out; then
+	if egrep -q '^; PAD(DING)?:' UDP-${SIZE}.out; then
 		cat UDP-${SIZE}.out
 		echo "Error: padding option seen in UDP message"
 		exit 1
@@ -34,13 +34,13 @@ do
 		exit 1
 	fi
 	if [ $SIZE -eq $PADDED ]; then
-		if grep -q '^; PAD:' TCP-${SIZE}.out; then
+		if egrep -q '^; PAD(DING)?:' TCP-${SIZE}.out; then
 			cat TCP-${SIZE}.out
 			echo "Error: padding option seen in TCP message of size $SIZE"
 			exit 1
 		fi
 	else
-		if ! grep -q '^; PAD:' TCP-${SIZE}.out; then
+		if ! egrep -q '^; PAD(DING)?:' TCP-${SIZE}.out; then
 			cat TCP-${SIZE}.out
 			echo "Error: padding option not seen in TCP message"
 			exit 1
@@ -59,13 +59,13 @@ do
 		exit 1
 	fi
 	if [ $SIZE -eq $PADDED ]; then
-		if grep -q '^; PAD:' TLS-${SIZE}.out; then
+		if egrep -q '^; PAD(DING)?:' TLS-${SIZE}.out; then
 			cat TLS-${SIZE}.out
 			echo "Error: padding option seen in TLS message of size $SIZE"
 			exit 1
 		fi
 	else
-		if ! grep -q '^; PAD:' TLS-${SIZE}.out; then
+		if ! egrep -q '^; PAD(DING)?:' TLS-${SIZE}.out; then
 			cat TLS-${SIZE}.out
 			echo "Error: padding option not seen in TLS message"
 			exit 1
@@ -84,13 +84,13 @@ do
 		exit 1
 	fi
 	if [ $SIZE -eq $PADDED ]; then
-		if grep -q '^; PAD:' UDP-PAD-${SIZE}.out; then
+		if egrep -q '^; PAD(DING)?:' UDP-PAD-${SIZE}.out; then
 			cat UDP-PAD-${SIZE}.out
 			echo "Error: padding option seen in UDP padding allowed  message of size $SIZE"
 			exit 1
 		fi
 	else
-		if ! grep -q '^; PAD:' UDP-PAD-${SIZE}.out; then
+		if ! egrep -q '^; PAD(DING)?:' UDP-PAD-${SIZE}.out; then
 			cat UDP-PAD-${SIZE}.out
 			echo "Error: padding option not seen in UDP padding allowed message"
 			exit 1
